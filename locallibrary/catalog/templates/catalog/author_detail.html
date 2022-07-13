@@ -1,0 +1,48 @@
+{% extends "basic_generic.html" %}
+{% block sidebar %}
+    <ul class="sidebar-nav">
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'books' %}">All books</a></li>
+        <li><a href="{% url 'authors' %}">All authors</a></li>
+    </ul>
+    <ul class="sidebar-nav">
+            {% if user.is_authenticated %}
+                <li>User: {{ user.get_username }}</li>
+                <li><a href="{% url 'my-borrowed' %}">My Borrowed</a></li>
+                <li><a href="{% url 'logout' %}?next={{request.path}}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'login'%}?next={{ request.path }}">Login</a></li>
+            {% endif %}
+    </ul>
+    {% if user.is_staff %}
+        {% if perms.catalog.can_mark_returned %}
+        <ul class="sidebar-nav">
+
+            <li>Staff</li>
+            <li><a href="{% url 'all-borrowed' %}">All Borrowed</a></li>
+
+        </ul>
+
+        <ul class="sidebar-nav">
+            <li>Author</li>
+            <li><a href="{% url 'author-update' author.id %}">Update</a></li>
+            <li><a href="{% url 'author-delete' author.id %}">Delete</a></li>
+        </ul>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>Author: {{ author.last_name }}, {{ author.first_name }}</h1>
+
+    <p>{{author.date_of_birth}} - {{author.date_of_death}}</p>
+
+    <div style="margin-left:20px;margin-top:40px">
+        <h4>Books</h4>
+        {% for book in author.book_set.all %}
+            <p style="margin: 0" class="text-success"><a href="{{ book.get_absolute_url }}"><strong>{{ book.title }}</strong></a></p>
+            <p style="margin: 0">{{ book.summary }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

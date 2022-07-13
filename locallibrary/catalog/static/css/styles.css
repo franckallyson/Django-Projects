@@ -1,0 +1,15 @@
+
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+.area-lateral {
+    background-color: #CFCFCF;
+    height: 100vh;
+}
+
+a {
+    style: btn btn-link;
+}
